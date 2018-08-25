@@ -10,6 +10,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private CharacterController _controller;
+    [SerializeField]
+    private float speed = 3.5f;
+    private float _gravity = 9.8f;
 
     void Start()
     {
@@ -18,8 +21,17 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        CalculateMovement();
+    }
+
+    void CalculateMovement()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
         // as this is a 3D game we only move in x and z axis and y axis is for gravity
-        Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        _controller.Move(direction * Time.deltaTime);
+        Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
+        Vector3 velocity = direction * speed;
+        velocity.y -= _gravity;		// we don't want to subtract gravity from the user input thus we subtract it from the velocity
+        _controller.Move(velocity * Time.deltaTime);
     }
 }
