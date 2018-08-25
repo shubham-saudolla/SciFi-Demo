@@ -28,10 +28,16 @@ public class Player : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
+
         // as this is a 3D game we only move in x and z axis and y axis is for gravity
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
+
         Vector3 velocity = direction * speed;
-        velocity.y -= _gravity;		// we don't want to subtract gravity from the user input thus we subtract it from the velocity
+
+        velocity.y -= _gravity;     // we don't want to subtract gravity from the user input thus we subtract it from the velocity
+
+        // changing from locl space to world space
+        velocity = transform.transform.TransformDirection(velocity);
         _controller.Move(velocity * Time.deltaTime);
     }
 }
