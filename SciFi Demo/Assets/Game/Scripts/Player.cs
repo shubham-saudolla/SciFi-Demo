@@ -17,11 +17,21 @@ public class Player : MonoBehaviour
     void Start()
     {
         _controller = GetComponent<CharacterController>();
+
+        // hiding the mouse cursor
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
         CalculateMovement();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     void CalculateMovement()
