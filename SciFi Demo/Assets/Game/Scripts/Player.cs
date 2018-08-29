@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     private float _gravity = 9.8f;
     [SerializeField]
     private GameObject _muzzleFlash;
+    [SerializeField]
+    private GameObject _hitMarkerPrefab;
 
     void Start()
     {
@@ -38,6 +40,8 @@ public class Player : MonoBehaviour
             if (Physics.Raycast(rayOrigin, out hitInfo))
             {
                 Debug.Log("Hit: " + hitInfo.transform.name);
+                GameObject hitMarkerClone = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal)) as GameObject;
+                Destroy(hitMarkerClone, 3f);
             }
         }
         else
