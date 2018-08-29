@@ -18,6 +18,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _hitMarkerPrefab;
 
+    [SerializeField]
+    private AudioSource _weaponAudio;
+
     void Start()
     {
         _controller = GetComponent<CharacterController>();
@@ -33,6 +36,12 @@ public class Player : MonoBehaviour
         {
             _muzzleFlash.SetActive(true);
 
+            // if audio is not playing, play audio
+            if (_weaponAudio.isPlaying == false)
+            {
+                _weaponAudio.Play();
+            }
+
             // Ray rayOrigin = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
             Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
             RaycastHit hitInfo;
@@ -47,6 +56,7 @@ public class Player : MonoBehaviour
         else
         {
             _muzzleFlash.SetActive(false);
+            _weaponAudio.Stop();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
