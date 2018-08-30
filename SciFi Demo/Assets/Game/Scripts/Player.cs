@@ -29,6 +29,8 @@ public class Player : MonoBehaviour
 
     private UIManager _uiManager;
 
+    public bool hasCoin = false;
+
     void Start()
     {
         _controller = GetComponent<CharacterController>();
