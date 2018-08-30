@@ -21,6 +21,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioSource _weaponAudio;
 
+    [SerializeField]
+    private int _currentAmmo;
+    private int _maxAmmo = 50;
+
+    private bool isReloading = false;
+
     void Start()
     {
         _controller = GetComponent<CharacterController>();
@@ -28,30 +34,16 @@ public class Player : MonoBehaviour
         // hiding the mouse cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        _currentAmmo = _maxAmmo;
     }
 
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        // shooting
+        if (Input.GetMouseButton(0) && _currentAmmo > 0)
         {
-            _muzzleFlash.SetActive(true);
-
-            // if audio is not playing, play audio
-            if (_weaponAudio.isPlaying == false)
-            {
-                _weaponAudio.Play();
-            }
-
-            // Ray rayOrigin = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
-            Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-            RaycastHit hitInfo;
-
-            if (Physics.Raycast(rayOrigin, out hitInfo))
-            {
-                Debug.Log("Hit: " + hitInfo.transform.name);
-                GameObject hitMarkerClone = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal)) as GameObject;
-                Destroy(hitMarkerClone, 3f);
-            }
+            Shoot();
         }
         else
         {
@@ -59,6 +51,14 @@ public class Player : MonoBehaviour
             _weaponAudio.Stop();
         }
 
+        // Reload mechanism
+        if (Input.GetKeyDown(KeyCode.R) && isReloading == false)
+        {
+            isReloading = true;
+            StartCoroutine(Reload());
+        }
+
+        // show the cursor
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.visible = true;
@@ -83,5 +83,35 @@ public class Player : MonoBehaviour
         // changing from locl space to world space
         velocity = transform.transform.TransformDirection(velocity);
         _controller.Move(velocity * Time.deltaTime);
+    }
+
+    void Shoot()
+    {
+        _muzzleFlash.SetActive(true);
+        _currentAmmo--;
+
+        // if audio is not playing, play audio
+        if (_weaponAudio.isPlaying == false)
+        {
+            _weaponAudio.Play();
+        }
+
+        // Ray rayOrigin = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
+        Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(rayOrigin, out hitInfo))
+        {
+            Debug.Log("Hit: " + hitInfo.transform.name);
+            GameObject hitMarkerClone = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal)) as GameObject;
+            Destroy(hitMarkerClone, 3f);
+        }
+    }
+
+    IEnumerator Reload()
+    {
+        yield return new WaitForSeconds(1.5f);
+        _currentAmmo = _maxAmmo;
+        isReloading = false;
     }
 }
