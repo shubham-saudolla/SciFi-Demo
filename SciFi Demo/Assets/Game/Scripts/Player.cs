@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         // shooting
-        if (Input.GetMouseButton(0) && _currentAmmo > 0)
+        if (Input.GetMouseButton(0) && _currentAmmo > 0 && _weapon.activeInHierarchy == true)
         {
             Shoot();
         }
