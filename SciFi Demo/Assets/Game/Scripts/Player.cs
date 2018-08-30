@@ -31,6 +31,9 @@ public class Player : MonoBehaviour
 
     public bool hasCoin = false;
 
+    [SerializeField]
+    private GameObject _weapon;
+
     void Start()
     {
         _controller = GetComponent<CharacterController>();
@@ -121,5 +124,10 @@ public class Player : MonoBehaviour
         _currentAmmo = _maxAmmo;
         _uiManager.UpdateAmmo(_currentAmmo);
         isReloading = false;
+    }
+
+    public void EnableWeapons()
+    {
+        _weapon.SetActive(true);
     }
 }
