@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
 
     public bool coinMessageDisplayed = false;
     public bool coinPickedupDisplayed = false;
+    public bool getOutDisplayed = false;
+    public bool weaponMessageDisplayed = false;
 
     public void UpdateAmmo(int count)
     {
