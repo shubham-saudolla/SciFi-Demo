@@ -16,6 +16,12 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _coin;
 
+    [SerializeField]
+    private Text _interactionText;
+
+    public bool coinMessageDisplayed = false;
+    public bool coinPickedupDisplayed = false;
+
     public void UpdateAmmo(int count)
     {
         _ammoText.text = "Ammo: " + count;
@@ -29,5 +35,18 @@ public class UIManager : MonoBehaviour
     public void RemoveCoin()
     {
         _coin.SetActive(false);
+    }
+
+    public void InteractWithText(string action)
+    {
+        _interactionText.gameObject.SetActive(true);
+        _interactionText.text = action;
+        StartCoroutine(LeaveInteractableArea());
+    }
+
+    IEnumerator LeaveInteractableArea()
+    {
+        yield return new WaitForSeconds(5f);
+        _interactionText.gameObject.SetActive(false);
     }
 }
