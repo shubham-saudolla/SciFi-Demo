@@ -14,7 +14,7 @@ public class LookY : MonoBehaviour
 
     void Start()
     {
-
+        
     }
 
     void Update()
